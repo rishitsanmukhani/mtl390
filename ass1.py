@@ -15,27 +15,37 @@ def histogram_plot(x, nbins):
   print("Generating histogram plot...")
   plt.hist(x, nbins)
   plt.title("Histogram Plot")
+  plt.xlabel("Value")
+  plt.ylabel("Frequency")
+  plt.tight_layout()
   plt.savefig("histogram.png")
-  plt.close()
+  plt.close()  
   print("Done\n")
 
-def bar_plot(x):
+def bar_plot(x,nbins):
   print("Generating bar plot...")
-  freq = [1]*len(x)
-  for idx in range(0,len(x)):
-    freq[idx]=idx
-  x = np.sort(x)
-  plt.bar(freq, x)
+  plt.hist(x, nbins, histtype='bar', rwidth=0.4)
   plt.title("Bar Plot")
-  plt.savefig("bar.png")
+  plt.ylabel("Frequency")
+
+  hist, bins = np.histogram(x, nbins)
+  bins = bins + ((bins[1]-bins[0])/2)
+  labels = ['']*nbins
+  for idx in range(0, nbins):
+    labels[idx] = '{:.2f}-{:.2f}'.format(bins[idx], bins[idx+1])
+
+  plt.xticks(bins, labels, rotation=45)
+  plt.tight_layout()
+  plt.savefig("bar_plot.png")
   plt.close()
   print("Done\n")
 
 def box_plot(x):
   print("Generating box plot...")
   plt.boxplot(x)
-  plt.savefig("box.png")
   plt.title("Box Plot")
+  plt.ylabel("Value")
+  plt.savefig("box.png")
   plt.close()
   print("Done\n")
 
@@ -46,10 +56,11 @@ def measures(x):
   print("Coefficient of variation : {}".format(st.variation(x)))
   print("Coefficient of skewness  : {}".format(st.skew(x)))
   print("Coefficient of kurtosis  : {}".format(st.kurtosis(x)))
-  print("Inter-quartile range     : {}".format(q75 - q25))   
+  print("Inter-quartile range     : {}".format(q75 - q25))
+  print("\n")
 
-frequency_table(data, 10)
-histogram_plot(data, 10)
-bar_plot(data)
+frequency_table(data, 20)
+histogram_plot(data, 20)
+bar_plot(data,20)
 box_plot(data)
 measures(data)
